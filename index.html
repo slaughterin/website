@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RiverBio</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background-color: black;
+      font-family: monospace;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .video-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    video {
+      max-width: 80vw;
+      max-height: 60vh;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .views {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      width: 100%;
+      max-width: 80vw; /* match video width */
+      font-size: 1rem;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .views img {
+      width: 24px;
+      height: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="video-wrapper">
+    <video controls autoplay loop>
+      <source src="x.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    <div class="views">
+      <span style="flex-grow:1"></span>
+      <img src="eye-xxl.png" alt="Views">
+      <span id="view-count">0</span>
+    </div>
+  </div>
+
+  <script>
+    // Browser tab title animation
+    const titles = ["RiverBio.org", "Typing Animation", "Enjoy Watching!"];
+    let titleIndex = 0, charIndex = 0, deleting = false;
+    const speed = 100;
+
+    function animateTitle() {
+      const currentTitle = titles[titleIndex];
+      if (!deleting) charIndex++; else charIndex--;
+      document.title = currentTitle.slice(0, charIndex);
+
+      if (!deleting && charIndex === currentTitle.length) {
+        deleting = true;
+        setTimeout(animateTitle, 1000);
+        return;
+      } else if (deleting && charIndex === 0) {
+        deleting = false;
+        titleIndex = (titleIndex + 1) % titles.length;
+      }
+      setTimeout(animateTitle, speed);
+    }
+
+    animateTitle();
+
+    // Fetch global views (server endpoint required)
+    async function updateViews() {
+      try {
+        const res = await fetch('/api/views');
+        const data = await res.json();
+        document.getElementById('view-count').textContent = data.views;
+      } catch (err) {
+        console.error('Failed to fetch views', err);
+      }
+    }
+
+    updateViews();
+  </script>
+</body>
+</html>
