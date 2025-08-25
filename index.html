@@ -30,22 +30,6 @@
       border-radius: 12px;
       display: block;
     }
-
-    .views {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      width: 100%;
-      max-width: 80vw; /* match video width */
-      font-size: 1rem;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .views img {
-      width: 24px;
-      height: 24px;
-    }
   </style>
 </head>
 <body>
@@ -87,19 +71,10 @@
 
     animateTitle();
 
-    // Fetch global views (server endpoint required)
-    async function updateViews() {
-      try {
-        const res = await fetch('/api/views');
-        const data = await res.json();
-        document.getElementById('view-count').textContent = data.views;
-      } catch (err) {
-        console.error('Failed to fetch views', err);
       }
     }
-
-    updateViews();
   </script>
 </body>
 </html>
+
 
